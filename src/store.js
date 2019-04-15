@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     list: [],
-    nickname: ''
+    nickname: '',
+    userStat: []
   },
   mutations: {
     setNick(state, payload) {
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     setList (state, payload) {
       state.list = payload
+    },
+    setUserStat (state, payload) {
+      state.userStat = payload
     }
   },
   actions: {
@@ -36,7 +40,7 @@ export default new Vuex.Store({
         .get(`https://api.worldoftanks.ru/wot/account/info/?application_id=071fd10b3827eb09b9d8e41c4bd3ca5c&account_id=${payload}`)
         .then(response => {
           let res = response.data
-          console.log(res)
+          commit('setUserStat', res)
         })
     }
 

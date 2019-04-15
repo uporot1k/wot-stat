@@ -14,10 +14,14 @@
         @click="setNick"
         :data-id="element.account_id"
       )
-        | {{element.nickname}}
+        router-link(
+          :to="{name: 'user', params: {userId: element.account_id}}"
+        )
+          | {{element.nickname}}
 </template>
 
 <script>
+
   import 'axios'
   import { mapActions } from 'vuex'
   import { mapState } from 'vuex'
