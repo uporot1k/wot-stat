@@ -5,14 +5,15 @@
     placeholder='Введи ник тутлиста'
     @input="sendRequest"
     @keyup.enter="getFirstInList"
+    autocomplete='false'
     )
     ul.list(
       v-if="list"
     )
-      li(
-        v-for="element in list"
+      li.listItem(
+        v-for="(element, index) in list"
         @click="setNick"
-        :data-id="element.account_id"
+        :tabindex="index+1"
       )
         router-link(
           :to="{name: 'user', params: {userId: element.account_id}}"
@@ -21,16 +22,14 @@
 </template>
 
 <script>
-
   import 'axios'
-  import { mapActions } from 'vuex'
-  import { mapState } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
 
 	export default {
 		name: "Search",
     data () {
 		  return {
-
+        tabindex: 0
       }
     },
     computed: {
@@ -42,8 +41,21 @@
         nickname: state => state.nickname
       })
     },
-    mounted () {
+    created () {
+		  const list = document.querySelectorAll('.listItem')
 
+      document.addEventListener('keydown', e => {
+        console.log(e)
+        if (e.keyCode === 40 || e.keyCode === 38) {
+
+          if (e.keyCode === 40) {
+
+          }
+          if (e.keyCode === 38) {
+
+          }
+        }
+      })
     },
     methods: {
       ...mapActions([
@@ -91,7 +103,9 @@
     display: flex
     align-items: center
     justify-content: flex-start
+    &:focus,
     &:hover
       background-color: #f6f7fa;
       color: #8954ba;
+
 </style>
