@@ -13,7 +13,7 @@
       li.listItem(
         v-for="(element, index) in list"
         @click="setNick"
-        :tabindex="index+1"
+        :tabindex="index"
       )
         router-link(
           :to="{name: 'user', params: {userId: element.account_id}}"
@@ -24,17 +24,19 @@
 <script>
   import 'axios'
   import { mapActions, mapState } from 'vuex'
-
+  import Tab from './../help/tab.js'
 	export default {
 		name: "Search",
     data () {
-		  return {
-        tabindex: 0
+      return {
+        
+        listItem: document.querySelectorAll('.listItem').length
       }
     },
     computed: {
-		  listLength () {
-		    return this.list.length
+      
+      listLength () {
+        return this.list.length
       },
       ...mapState({
         list: state => state.list,
@@ -42,17 +44,31 @@
       })
     },
     created () {
-		  const list = document.querySelectorAll('.listItem')
-
       document.addEventListener('keydown', e => {
         console.log(e)
         if (e.keyCode === 40 || e.keyCode === 38) {
-
+          // Key Down
           if (e.keyCode === 40) {
+            if (e.target.nodeName === 'INPUT') {
+              e.preventDefault();
+              let item = document.querySelector('.listItem');
+              item.focus();
 
+            } else if (e.target.nodeName === 'LI' && this.listLength > e.getAttribute('tabindex')) {
+
+              document.querySelectorAll('.listItem')[e.getAttribute('tabindex')+1].focus();
+
+            }
           }
+          // Key Up
           if (e.keyCode === 38) {
+            if (( e.target.nodeName === 'LI') && 1 < e.getAttribute('tabindex') ) {
+              e.preventDefault()
 
+
+              document.querySelectorAll('.listItem')[e.getAttribute('tabindex')-1].focus();
+              
+            }
           }
         }
       })
@@ -66,6 +82,7 @@
 
       sendRequest (e) {
         this.getID(e.target.value)
+
       },
       setNick (e) {
         let id = e.target.getAttribute('data-id')
@@ -81,6 +98,7 @@
 
 <style lang="stylus" scoped>
   @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&subset=cyrillic,cyrillic-ext');
+ 
   input
     width: 514px;
     height: 56px;
@@ -107,5 +125,5 @@
     &:hover
       background-color: #f6f7fa;
       color: #8954ba;
-
+      outline 0
 </style>
